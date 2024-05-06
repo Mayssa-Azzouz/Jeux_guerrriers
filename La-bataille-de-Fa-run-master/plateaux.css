@@ -1,0 +1,10 @@
+#plateau {
+    display: flex;
+    justify-content: space-between;
+}
+
+.carreau {
+    width: 100px;
+    height: 100px;
+    border: 2px solid black;
+}
