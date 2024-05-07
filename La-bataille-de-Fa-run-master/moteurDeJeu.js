@@ -1,70 +1,117 @@
+
+//les deux chateau
+const chateauBleu = new Chateau();
+const chateauRouge = new Chateau();
+
+chateauBleu.equipe[0]="bleu";
+chateauRouge.equipe[0]="rouge";
+
+//le plateau
+const plateau = new Plateau();
+
+// div des geurriers novices
+const warriorsContainerBleu = document.getElementById('warriorsContainerBleu');
+const warriorsContainerRouge = document.getElementById('warriorsContainerRouge');
+
 // div waitingList
-const waitingList = document.getElementById('waitingList');
+const waitingListBleu = document.getElementById('waitingListBleu');
+const waitingListRouge = document.getElementById('waitingListRouge');
 
-// liste d'attente
-let selectedWarriors = [];
+//boutons d'entrainement
+btnEntrainerRouge = document.getElementById("btnEntrainerRouge");
+btnEntrainerBleu = document.getElementById("btnEntrainerBleu");
 
-// Mettre à jour l'affichage de la liste d'attente une première fois au chargement de la page
-updateWaitingList();
 
 // Fonction pour mettre à jour l'affichage de la liste d'attente
-function updateWaitingList() {
-    waitingList.innerHTML = ''; // Effacer la liste actuelle
-    // Parcourir les guerriers sélectionnés et les ajouter à la liste d'attente
+function updateWaitingList(waitingList,warriorsContainer,chateau) {
+    waitingList.innerHTML = ''; 
     chateau.fileAttente.forEach(guerrier => {
-        // Créer un élément img pour afficher l'image du guerrier
         const imageElement = document.createElement('img');
-        imageElement.src = guerrier.guerrier.image; // Définir le chemin de l'image du guerrier
+        imageElement.src = guerrier.guerrier.image; 
         console.log("image de nain",guerrier);
-    imageElement.alt = `Image de ${guerrier.type}`; // Définir un texte alternatif pour l'image
+        imageElement.alt = `Image de ${guerrier.type}`; 
         imageElement.addEventListener('click', () => {
-            // Supprimer le guerrier de la liste d'attente lorsque son image est cliquée
             const index = chateau.fileAttente.indexOf(guerrier);
             if (index !== -1) {
                 chateau.fileAttente.splice(index, 1);
-                updateWaitingList();
-
-                // Ajouter le guerrier à la carte chateau.guerriers
+                updateWaitingList(waitingList,warriorsContainer,chateau);
                 chateau.guerriersNovices.push(guerrier, 0);
 
-                
-                // Créer un nouvel élément de liste pour le guerrier dans le conteneur des guerriers
                 const warriorItem = document.createElement('div');
                 const imageElement = document.createElement('img');
                 imageElement.src = guerrier.guerrier.image;
                 imageElement.alt = `Image de ${guerrier.constructor.type}`;
                 warriorItem.appendChild(imageElement);
                 
-                // Ajouter un gestionnaire d'événements pour gérer la sélection du guerrier dans la liste des guerriers
                 warriorItem.addEventListener('click', () => {
-                    // Ajouter le guerrier à la liste d'attente
                     chateau.fileAttente.push(guerrier);
-                    updateWaitingList(); // Mettre à jour l'affichage de la liste d'attente
+                    updateWaitingList(waitingList,warriorsContainer,chateau); // Mettre à jour l'affichage de la liste d'attente
                     
-                    // Supprimer le guerrier de la carte chateau.guerriers
                     chateau.guerriersNovices.splice(index, 1);
 
 
-                    // Supprimer l'élément de la liste des guerriers
                     warriorsContainer.removeChild(warriorItem);
                 });
                 
-                // Ajouter l'élément de liste à la liste des guerriers
                 warriorsContainer.appendChild(warriorItem);
             }
 
         });
-        waitingList.appendChild(imageElement); // Ajouter l'élément img à la liste d'attente
+        waitingList.appendChild(imageElement); 
         
     });
 }
 
+//chateau bleu
+chateauBleu.guerriersNovices.forEach((guerrier) => {
+
+    const warriorItem = document.createElement('div');    
+    const imageElement = document.createElement('img');
+    imageElement.src = guerrier.guerrier.image; 
+   imageElement.alt = `Image de ${guerrier.guerrier.type}`;
+    warriorItem.appendChild(imageElement); 
+    
+    // click guerrier novice
+    warriorItem.addEventListener('click', () => {
+        const index = chateauBleu.fileAttente.indexOf(guerrier);
+        if (index !== -1) {
+            chateauBleu.fileAttente.splice(index, 1);
+            warriorItem.classList.remove('selected');
+        } else {
+            if (chateauBleu.fileAttente.length < 10) {
+                chateauBleu.fileAttente.push(guerrier);
+                console.log("file dattente",chateauBleu.fileAttente);
+
+                warriorItem.classList.add('selected');
+                
+                warriorsContainerBleu.removeChild(warriorItem);
+                chateauBleu.guerriersNovices.splice(index, 1);
+                                console.log("la liste des guerriers", chateauBleu.guerriersNovices);
+
+            }
+        }
+        updateWaitingList( waitingListBleu ,warriorsContainerBleu,chateauBleu);
+        console.log("Liste d'attente des guerriers bleu:", chateauBleu.fileAttente);
+
+        //console.log("Liste d'attente des guerriers :", chateau.fileAttente);
+
+    });
+    warriorsContainerBleu.appendChild(warriorItem);
 
 
-// div des geurriers novices
-const warriorsContainer = document.getElementById('warriorsContainer');
+});
 
-chateau.guerriersNovices.forEach((guerrier) => {
+
+
+// Mettre à jour l'affichage de la liste d'attente une première fois au chargement de la page
+updateWaitingList(waitingListBleu,warriorsContainerBleu,chateauBleu);
+updateWaitingList(waitingListRouge,warriorsContainerRouge,chateauRouge);
+
+
+
+
+//chateau rouge
+chateauRouge.guerriersNovices.forEach((guerrier) => {
 
     // Créer guerrier
     const warriorItem = document.createElement('div');    
@@ -75,79 +122,145 @@ chateau.guerriersNovices.forEach((guerrier) => {
     
     // click guerrier novice
     warriorItem.addEventListener('click', () => {
-        // Vérifier si le guerrier est déjà sélectionné
-        const index = chateau.fileAttente.indexOf(guerrier);
+        const index = chateauRouge.fileAttente.indexOf(guerrier);
         if (index !== -1) {
-            // Le guerrier est déjà sélectionné, donc le désélectionner
-            chateau.fileAttente.splice(index, 1);
+            chateauRouge.fileAttente.splice(index, 1);
             warriorItem.classList.remove('selected');
         } else {
-            // Vérifier si moins de 10 guerriers sont déjà sélectionnés
-            if (chateau.fileAttente.length < 10) {
-                // Le guerrier n'est pas encore sélectionné et moins de 10 guerriers sont déjà sélectionnés, donc le sélectionner
-                chateau.fileAttente.push(guerrier);
-                console.log("file dattente",chateau.fileAttente);
+            if (chateauRouge.fileAttente.length < 10) {
+                chateauRouge.fileAttente.push(guerrier);
+                console.log("file dattente des rouges",chateauRouge.fileAttente);
 
                 warriorItem.classList.add('selected');
                 
-                // Supprimer l'élément de la liste des guerriers affichée dans le conteneur warriorsContainer
-                warriorsContainer.removeChild(warriorItem);
-                chateau.guerriersNovices.splice(index, 1);
-                                console.log("la liste des guerriers", chateau.guerriersNovices);
+                warriorsContainerRouge.removeChild(warriorItem);
+                chateauRouge.guerriersNovices.splice(index, 1);
+                                console.log("la liste des guerriers", chateauRouge.guerriersNovices);
 
             }
         }
         // Mettre à jour l'affichage de la liste d'attente
-        updateWaitingList();
-        console.log("Liste d'attente des guerriers :", chateau.fileAttente);
+        updateWaitingList(waitingListRouge ,warriorsContainerRouge,chateauRouge);
+        console.log("Liste d'attente des guerriers  rouge:", chateauRouge.fileAttente);
 
         //console.log("Liste d'attente des guerriers :", chateau.fileAttente);
 
     });
-    // Ajouter l'élément de liste au conteneur des guerriers
-    warriorsContainer.appendChild(warriorItem);
+    warriorsContainerRouge.appendChild(warriorItem);
 
 });
 
-// click la liste d'attente
-waitingList.addEventListener('click', (event) => {
+// click la liste d'attente bleu
+waitingListBleu.addEventListener('click', (event) => {
     const clickedElement = event.target;
-    const warriorIndex = chateau.fileAttente.findIndex(warrior => warrior.image === clickedElement.src);
+    const warriorIndex = chateauBleu.fileAttente.findIndex(warrior => warrior.image === clickedElement.src);
     
-    // Vérifier si l'élément cliqué est une image de guerrier dans la liste d'attente
     if (warriorIndex !== -1) {
-        const warrior = chateau.fileAttente[warriorIndex];
+        const warrior = chateauBleu.fileAttente[warriorIndex];
         
         // Supprimer le guerrier de la liste d'attente
-        chateau.fileAttente.splice(warriorIndex, 1);
-        updateWaitingList(); // Mettre à jour l'affichage de la liste d'attente
+        chateauBleu.fileAttente.splice(warriorIndex, 1);
+        updateWaitingList(waitingListBleu,warriorsContainerBleu,chateauBleu); 
         
-        // Ajouter le guerrier à la carte chateau.guerriers
-        chateau.guerriersNovices.push(warrior,0) ;
+        chateauBleu.guerriersNovices.push(warrior,0) ;
         
-        // Créer un nouvel élément de liste pour le guerrier dans le conteneur des guerriers
         const warriorItem = document.createElement('div');
         const imageElement = document.createElement('img');
         imageElement.src = warrior.image;
         imageElement.alt = `Image de ${warrior.constructor.type}`;
         warriorItem.appendChild(imageElement);
         
-        // Ajouter un gestionnaire d'événements pour gérer la sélection du guerrier dans la liste des guerriers
         warriorItem.addEventListener('click', () => {
-            // Ajouter le guerrier à la liste d'attente
-            chateau.fileAttente.push(warrior);
-            updateWaitingList(); // Mettre à jour l'affichage de la liste d'attente
+            chateauBleu.fileAttente.push(warrior);
+            updateWaitingList(waitingListBleu,warriorsContainerBleu,chateauBleu); 
             
-            // Supprimer le guerrier de la carte chateau.guerriersNovices
-            const index = chateau.guerriersNovices.indexOf(warrior);
+            const index = chateauBleu.guerriersNovices.indexOf(warrior);
             if (index !== -1) {
-                chateau.guerriersNovices.splice(index, 1);
+                chateauBleu.guerriersNovices.splice(index, 1);
             }
-            // Supprimer l'élément de la liste des guerriers
-            warriorsContainer.removeChild(warriorItem);
+            warriorsContainerBleu.removeChild(warriorItem);
         });
         
-        // Ajouter l'élément de liste à la liste des guerriers
-        warriorsContainer.appendChild(warriorItem);
+        warriorsContainerBleu.appendChild(warriorItem);
     }
 });
+
+
+// click la liste d'attente rouge
+waitingListRouge.addEventListener('click', (event) => {
+    const clickedElement = event.target;
+    const warriorIndex = chateauRouge.fileAttente.findIndex(warrior => warrior.image === clickedElement.src);
+    
+    if (warriorIndex !== -1) {
+        const warrior = chateauRouge.fileAttente[warriorIndex];
+        
+        chateauRouge.fileAttente.splice(warriorIndex, 1);
+        updateWaitingList(waitingListRouge,warriorsContainerRouge,chateauRouge); // Mettre à jour l'affichage de la liste d'attente
+        
+        chateauRouge.guerriersNovices.push(warrior,0) ;
+        
+        const warriorItem = document.createElement('div');
+        const imageElement = document.createElement('img');
+        imageElement.src = warrior.image;
+        imageElement.alt = `Image de ${warrior.constructor.type}`;
+        warriorItem.appendChild(imageElement);
+        
+        warriorItem.addEventListener('click', () => {
+            chateauRouge.fileAttente.push(warrior);
+            updateWaitingList(waitingListRouge,warriorsContainerRouge,chateauRouge); 
+            const index = chateauRouge.guerriersNovices.indexOf(warrior);
+            if (index !== -1) {
+                chateauRouge.guerriersNovices.splice(index, 1);
+            }
+            warriorsContainerRouge.removeChild(warriorItem);
+        });
+        
+        warriorsContainerRouge.appendChild(warriorItem);
+    }
+});
+
+
+
+
+btnEntrainerBleu.addEventListener('click', ()=>{
+    chateauBleu.entrainer();
+    if(chateauBleu.fileAttente.length>0)
+        {
+    btnEntrainerBleu.style.display = 'none';}
+
+   plateau.ajouterGuerrier(chateauBleu,0);
+     console.log("longeur file",chateauBleu.fileAttente.length);
+     console.log("longeur file",chateauBleu.fileAttente);
+     console.log("ressources",chateauBleu.ressources);
+     console.log("le plateau",plateau.carreaux);
+     console.log("longeur file",chateauBleu.fileAttente);
+     // plateau.afficherGuerriers(0);
+    updateWaitingList(waitingListBleu,warriorsContainerBleu,chateauBleu);
+    plateau.deplacerGuerriersBleu();
+for(let i = 0; i < plateau.carreaux.length; i++) {
+             plateau.afficherGuerriers(i);
+         
+}
+})
+
+btnEntrainerRouge.addEventListener('click', ()=>{
+     chateauRouge.entrainer();
+     if(chateauRouge.fileAttente.length>0)
+        {
+    btnEntrainerRouge.style.display = 'none';}
+     plateau.ajouterGuerrier(chateauRouge,4);
+      console.log("longeur file",chateauRouge.fileAttente.length);
+      console.log("longeur file",chateauRouge.fileAttente);
+      console.log("ressources",chateauRouge.ressources);
+      console.log("le plateau",plateau.carreaux);
+      console.log("longeur file",chateauRouge.fileAttente);
+     //  plateau.afficherGuerriers(4);
+      updateWaitingList(waitingListRouge,waitingListRouge,chateauRouge);
+      plateau.deplacerGuerriersRouge();
+    for (let i = 0; i < plateau.carreaux.length; i++) {
+              plateau.afficherGuerriers(i);
+          }
+
+})
+
+

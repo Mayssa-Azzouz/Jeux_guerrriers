@@ -9,3 +9,23 @@ body{
     height: 100vh;
     /*background-color: green;*/
 }
+.section {
+    display: flex;
+    flex-direction: column;
+  }
+#warriorsContainerBleu{
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px; /* Définir la largeur */
+    height: 100px; /* Définir la hauteur */
+    justify-content: space-around;
+
+}
+#warriorsContainerRouge{
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px; /* Définir la largeur */
+    height: 100px; /* Définir la hauteur */
+    justify-content: space-around;
+
+}

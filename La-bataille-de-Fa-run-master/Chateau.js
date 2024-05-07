@@ -1,8 +1,9 @@
 class Chateau {
     constructor() {
         this.ressources = 3;
-        this.fileAttente = [];
         this.guerriersNovices = [];
+        this.fileAttente = [];
+        this.equipe = [];
         this.initialiserGuerriers();
 
     }
