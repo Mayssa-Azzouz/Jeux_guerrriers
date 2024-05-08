@@ -9,6 +9,8 @@ chateauRouge.equipe[0]="rouge";
 //le plateau
 const plateau = new Plateau();
 
+
+
 // div des geurriers novices
 const warriorsContainerBleu = document.getElementById('warriorsContainerBleu');
 const warriorsContainerRouge = document.getElementById('warriorsContainerRouge');
@@ -20,6 +22,9 @@ const waitingListRouge = document.getElementById('waitingListRouge');
 //boutons d'entrainement
 btnEntrainerRouge = document.getElementById("btnEntrainerRouge");
 btnEntrainerBleu = document.getElementById("btnEntrainerBleu");
+//btn de déplacement
+
+btnDeplacer= document.getElementById("btnDeplacer");
 
 
 // Fonction pour mettre à jour l'affichage de la liste d'attente
@@ -224,43 +229,69 @@ waitingListRouge.addEventListener('click', (event) => {
 
 btnEntrainerBleu.addEventListener('click', ()=>{
     chateauBleu.entrainer();
-    if(chateauBleu.fileAttente.length>0)
-        {
-    btnEntrainerBleu.style.display = 'none';}
+    console.log("plateau initiale",plateau);
+    if(chateauBleu.fileAttente.length>0) {btnEntrainerBleu.style.display = 'none';}
 
-   plateau.ajouterGuerrier(chateauBleu,0);
-     console.log("longeur file",chateauBleu.fileAttente.length);
-     console.log("longeur file",chateauBleu.fileAttente);
-     console.log("ressources",chateauBleu.ressources);
-     console.log("le plateau",plateau.carreaux);
-     console.log("longeur file",chateauBleu.fileAttente);
-     // plateau.afficherGuerriers(0);
+  //  plateau.carreaux[2] = chateauRouge.equipe;
+//plateau.carreaux[2] = chateauRouge.equipe;
+
+    plateau.ajouterGuerrier(chateauBleu,0);
+    plateau.afficherGuerriers(0);
+
+    //console.log('tous plateaux avant!!!!!!!',plateau.carreaux );
+   // plateau.deplacerGuerriersBleu();
+    console.log('tous plateaux!!!!!!!',plateau.carreaux );
+
     updateWaitingList(waitingListBleu,warriorsContainerBleu,chateauBleu);
-    plateau.deplacerGuerriersBleu();
-for(let i = 0; i < plateau.carreaux.length; i++) {
+
+
+/*for(let i = 0; i < pos; i++) {
              plateau.afficherGuerriers(i);
          
-}
+}*/
+//console.log("longeur file",chateauBleu.fileAttente.length);
+console.log(" file bleu",chateauBleu.fileAttente);
+console.log("ressources",chateauBleu.ressources);
+console.log("equipe bleu",chateauBleu.equipe);
 })
 
 btnEntrainerRouge.addEventListener('click', ()=>{
      chateauRouge.entrainer();
-     if(chateauRouge.fileAttente.length>0)
-        {
-    btnEntrainerRouge.style.display = 'none';}
-     plateau.ajouterGuerrier(chateauRouge,4);
-      console.log("longeur file",chateauRouge.fileAttente.length);
-      console.log("longeur file",chateauRouge.fileAttente);
-      console.log("ressources",chateauRouge.ressources);
-      console.log("le plateau",plateau.carreaux);
-      console.log("longeur file",chateauRouge.fileAttente);
-     //  plateau.afficherGuerriers(4);
-      updateWaitingList(waitingListRouge,waitingListRouge,chateauRouge);
-      plateau.deplacerGuerriersRouge();
-    for (let i = 0; i < plateau.carreaux.length; i++) {
-              plateau.afficherGuerriers(i);
-          }
+     console.log("plateau initiale",plateau);
+
+     if(chateauRouge.fileAttente.length>0){btnEntrainerRouge.style.display = 'none';}
+
+     plateau.ajouterGuerrier(chateauRouge,4);   
+     plateau.afficherGuerriers(4);
+    
+
+ //    plateau.deplacerGuerriersRouge();
+    // console.log('tous plateaux apres rouge!!!!!!!',plateau.carreaux );
+
+     updateWaitingList(waitingListRouge,waitingListRouge,chateauRouge);
+
+  /*for(let i = 4; i < pos; i++) {
+             plateau.afficherGuerriers(pos);
+  }    */   
+          //console.log("longeur file",chateauBleu.fileAttente.length);
+        /*  console.log(" file rouge",chateauRouge.fileAttente);
+          console.log("ressources",chateauRouge.ressources);
+ 
+         console.log("equipe rouge",chateauRouge.equipe);
+       // }*/
+})
+
+btnDeplacer.addEventListener('click', ()=>{
+    plateau.deplacerGuerriers();
+    console.log("etat plateau",plateau);
+    console.log("equipe bleu",chateauBleu.equipe);
+    console.log("equipe rouge ",chateauRouge.equipe);
+    plateau.Tour(chateauBleu.equipe,chateauRouge.equipe)
+
+
 
 })
+
+
 
 
